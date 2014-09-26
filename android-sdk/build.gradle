@@ -22,10 +22,12 @@ android {
 }
 
 repositories {
+    maven { url 'https://repo.eclipse.org/content/repositories/paho-releases' }
     mavenCentral()
 }
 
 dependencies {
+    compile 'org.eclipse.paho:mqtt-client:0.4.0'
     compile 'com.netflix.rxjava:rxjava-core:0.20.4'
     compile 'com.netflix.rxjava:rxjava-android:0.20.4'
     compile 'com.squareup.dagger:dagger:1.2.2'
