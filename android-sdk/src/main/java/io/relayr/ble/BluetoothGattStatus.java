@@ -2,9 +2,11 @@ package io.relayr.ble;
 
 import android.bluetooth.BluetoothGatt;
 
-abstract class BluetoothGattStatus {
+public abstract class BluetoothGattStatus {
 
-    static String toString(int status) {
+    public static final int GATT_FAILURE_BINDING_REQUIRED = 133;
+
+    public static String toString(int status) {
         switch (status) {
             case BluetoothGatt.GATT_FAILURE: {
                 return "Failure";
@@ -33,11 +35,14 @@ abstract class BluetoothGattStatus {
             case BluetoothGatt.GATT_WRITE_NOT_PERMITTED: {
                 return "GATT write operation is not permitted";
             }
+            case GATT_FAILURE_BINDING_REQUIRED: {
+                return "GATT failure: pairing required";
+            }
             default: return "Not identified error";
         }
     }
 
-    static boolean isFailureStatus(int status) {
+    public static boolean isFailureStatus(int status) {
         switch (status) {
             case BluetoothGatt.GATT_FAILURE:
             case BluetoothGatt.GATT_INSUFFICIENT_AUTHENTICATION:
@@ -47,6 +52,7 @@ abstract class BluetoothGattStatus {
             case BluetoothGatt.GATT_READ_NOT_PERMITTED:
             case BluetoothGatt.GATT_REQUEST_NOT_SUPPORTED:
             case BluetoothGatt.GATT_WRITE_NOT_PERMITTED:
+            case GATT_FAILURE_BINDING_REQUIRED:
                 return true;
             case BluetoothGatt.GATT_SUCCESS:
             default: return false;

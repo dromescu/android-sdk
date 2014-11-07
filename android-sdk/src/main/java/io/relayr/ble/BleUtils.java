@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import java.nio.ByteBuffer;
+import java.util.UUID;
+
 import javax.inject.Inject;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -58,7 +61,17 @@ public class BleUtils {
                         STATUS_BLUETOOTH_DISABLED;
     }
 
-    static String getShortUUID(String longUUID) {
+    public static UUID fromBytes(byte[] value) {
+        ByteBuffer bb = ByteBuffer.wrap(value);
+        long firstLong = bb.getLong();
+        long secondLong = bb.getLong();
+        return new UUID(firstLong, secondLong);
+    }
+
+    public static String getShortUUID(UUID uuid) {
+        return getShortUUID(uuid.toString());
+    }
+    public static String getShortUUID(String longUUID) {
         return longUUID.substring(4, 8);
     }
 }

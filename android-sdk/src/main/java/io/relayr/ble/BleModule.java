@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.relayr.RelayrSdk;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
 
@@ -27,13 +28,10 @@ public class BleModule {
         app = context;
     }
 
-    @Provides @Singleton BluetoothManager provideBluetoothManager() {
-        return (BluetoothManager) app.getSystemService(BLUETOOTH_SERVICE);
-    }
-
-    @Provides @Singleton BluetoothAdapter provideBluetoothAdapter(BluetoothManager manager) {
+    private BluetoothAdapter getBluetoothAdapter() {
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
+        BluetoothManager manager = (BluetoothManager) app.getSystemService(BLUETOOTH_SERVICE);
         return manager == null ? null: manager.getAdapter();
     }
 
@@ -41,8 +39,15 @@ public class BleModule {
         return app.getPackageManager();
     }
 
-    @Provides @Singleton BleUtils provideBleUtils(BluetoothAdapter adapter, PackageManager manager) {
-        return new BleUtils(adapter, manager);
+    @Provides @Singleton BleUtils provideBleUtils(PackageManager manager) {
+        return android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
+                new BleUtils(null, manager): new BleUtils(getBluetoothAdapter(), manager);
+    }
+
+    @Provides @Singleton RelayrBleSdk provideRelayrBleSdk() {
+        return RelayrSdk.isBleSupported() ?
+                new RelayrBleSdkImpl(getBluetoothAdapter(), new BleDeviceManager()) :
+                new NullableRelayrBleSdk();
     }
 
 }

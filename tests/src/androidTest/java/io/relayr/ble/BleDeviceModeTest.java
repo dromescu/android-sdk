@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.relayr.ble.BleDeviceMode.CONNECTED_TO_MASTER_MODULE;
@@ -40,15 +41,12 @@ public class BleDeviceModeTest {
     }
 
     @Test public void fromParcelUuidArrayTest_fromRandomUuidArray_shouldReturnUnknown() {
-        List<String> uuids = new ArrayList<>();
-        uuids.add("2902");
+        List<String> uuids = Arrays.asList("2902");
         Assert.assertEquals(UNKNOWN, fromServiceUuids(uuids));
     }
 
     @Test public void fromParcelUuidArrayTest_containingOnBoardingService_shouldReturnOnBoarding() {
-        List<String> uuids = new ArrayList<>();
-        uuids.add("2902");
-        uuids.add("2001");
+        List<String> uuids = Arrays.asList("2902", "2001");
         Assert.assertEquals(ON_BOARDING, fromServiceUuids(uuids));
     }
 

@@ -22,7 +22,7 @@ public class AdvertisementPacketParser {
         List<String> serviceUuids = new ArrayList<>();
         if (data != null) {
             int packetLength = data.length;
-            for (int index = 0; index < packetLength; index++) {
+            for (int index = 0; index < packetLength-1; index++) {
                 int fieldLength = data[index];
                 int fieldName = data[++index];
 

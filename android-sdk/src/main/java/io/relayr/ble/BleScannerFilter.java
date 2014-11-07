@@ -5,8 +5,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Build;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import io.relayr.ble.parser.AdvertisementPacketParser;
@@ -16,7 +14,6 @@ import static io.relayr.ble.BleDeviceMode.UNKNOWN;
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 class BleScannerFilter implements BluetoothAdapter.LeScanCallback {
 
-    private Collection<BleDeviceType> mDevicesInterestedIn = Collections.emptySet();
     private final BleDeviceManager mDeviceManager;
     private final BleFilteredScanCallback mBleFilteredScanCallback;
 
@@ -25,15 +22,10 @@ class BleScannerFilter implements BluetoothAdapter.LeScanCallback {
         mBleFilteredScanCallback = callback;
     }
 
-    boolean isRelevant(BluetoothDevice device, BleDeviceMode mode) {
-        return !mDeviceManager.isDeviceDiscovered(device.getAddress()) &&
-                BleDeviceType.isKnownDevice(device.getName()) &&
-                mDevicesInterestedIn.contains(BleDeviceType.getDeviceType(device.getName())) &&
+    boolean isRelevant(BluetoothDevice device, String deviceName, BleDeviceMode mode) {
+        return !mDeviceManager.isDeviceDiscovered(device, mode) &&
+                BleDeviceType.isKnownDevice(deviceName) &&
                 !mode.equals(UNKNOWN);
-    }
-
-    void setDevicesInterestedIn(Collection<BleDeviceType> devicesInterestedIn) {
-        if (devicesInterestedIn != null) mDevicesInterestedIn = devicesInterestedIn;
     }
 
     @Override
@@ -41,8 +33,8 @@ class BleScannerFilter implements BluetoothAdapter.LeScanCallback {
         String deviceName = AdvertisementPacketParser.decodeDeviceName(scanRecord);
         List<String> serviceUuids = AdvertisementPacketParser.decodeServicesUuid(scanRecord);
         BleDeviceMode mode = BleDeviceMode.fromServiceUuids(serviceUuids);
-        if (!isRelevant(device, mode)) return;
-        BleDevice bleDevice = new BleDevice(device, device.getAddress(), deviceName, mode);
+        if (!isRelevant(device, deviceName, mode)) return;
+        BleDevice bleDevice = new BleDevice(device, deviceName, mode, mDeviceManager);
         if (mBleFilteredScanCallback != null) mBleFilteredScanCallback.onLeScan(bleDevice, rssi);
     }
 

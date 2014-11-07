@@ -2,13 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'robolectric'
 apply plugin: 'jacoco'
 
-jacoco {
-    toolVersion = "0.7.0.201403182114"
-}
-
 android {
     compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    buildToolsVersion '21.1'
 
     defaultConfig {
         minSdkVersion 15
@@ -33,10 +29,13 @@ android {
 dependencies {
     compile project(':android-sdk')
 
-    androidTestCompile 'junit:junit:4.11'
-    androidTestCompile 'com.squareup:fest-android:1.0.7'
+    androidTestCompile'junit:junit:4.11'
+    androidTestCompile 'com.squareup:fest-android:1.0.8'
     androidTestCompile 'org.mockito:mockito-all:1.9.5'
-    androidTestCompile 'org.robolectric:robolectric:2.3'
+    androidTestCompile('org.robolectric:robolectric:2.3') {
+        exclude group: 'commons-logging'
+        exclude group: 'org.apache.httpcomponents'
+    }
 
     androidTestCompile project(':android-sdk').android.libraryVariants.toList().first().javaCompile.classpath
     androidTestCompile project(':android-sdk').android.libraryVariants.toList().first().javaCompile.outputs.files

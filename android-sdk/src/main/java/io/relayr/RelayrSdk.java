@@ -1,7 +1,6 @@
 package io.relayr;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 
 import javax.inject.Inject;
@@ -24,7 +23,7 @@ public class RelayrSdk {
     @Inject static RelayrApi mRelayrApi;
     @Inject static WebSocketClient mWebSocketClient;
     @Inject static BleUtils mBleUtils;
-    @Inject static BluetoothAdapter mBluetoothAdapter;
+    @Inject static RelayrBleSdk mRelayrBleSdk;
 
     private static LoginEventListener loginEventListener;
 
@@ -96,11 +95,16 @@ public class RelayrSdk {
     }
 
     /**
-     * Accessor for the Bluetooth LE SDK
+     * Provides the relayr sdk with a BLE implementation or an empty implementation, in case
+     * bluetooth is not available on the device.
+     * An empty implementation is one in which the methods do not function
+     * This call should be preceded by {@link io.relayr.RelayrSdk#isBleSupported}
+     * to check whether BLE is supported
+     * and by {@link io.relayr.RelayrSdk#isBleAvailable} to check whether BLE is activated
      * @return the handler of the Relayr BLE SDK
      */
      public static RelayrBleSdk getRelayrBleSdk() {
-        return RelayrBleSdk.newInstance(mBluetoothAdapter);
+        return mRelayrBleSdk;
     }
 
     /**

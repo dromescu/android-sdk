@@ -2,15 +2,30 @@ package io.relayr.ble;
 
 import java.util.List;
 
+import static io.relayr.ble.service.ShortUUID.SERVICE_CONNECTED_TO_MASTER_MODULE;
+import static io.relayr.ble.service.ShortUUID.SERVICE_DIRECT_CONNECTION;
+import static io.relayr.ble.service.ShortUUID.SERVICE_ON_BOARDING;
+/**
+ * The modes in which a relayr Device can be.
+ */
 public enum BleDeviceMode {
+    /**
+     * In on boarding mode, when first being configured and registered on the relayr cloud. It will
+     * be able to access the functionality in and characteristics in
+     * {@link io.relayr.ble.service.OnBoardingService}
+     */
     ON_BOARDING,
+    /**
+     * Connected via BLE to a transmitter or an App. It will be able to access the functionality
+     * in and characteristics in {@link io.relayr.ble.service.DirectConnectionService}
+     */
     DIRECT_CONNECTION,
+    /**
+     * Connected to the WunderBar Master Module. It will be able to access the functionality
+     * in and characteristics in {@link io.relayr.ble.service.MasterModuleService}
+     */
     CONNECTED_TO_MASTER_MODULE,
     UNKNOWN;
-
-    private static final String SERVICE_CONNECTED_TO_MASTER_MODULE = "2000";
-    private static final String SERVICE_ON_BOARDING = "2001";
-    private static final String SERVICE_DIRECT_CONNECTION = "2002";
 
     public static BleDeviceMode fromUuid(String serviceUuid) {
         return serviceUuid.equals(SERVICE_DIRECT_CONNECTION) ? DIRECT_CONNECTION:

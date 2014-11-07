@@ -3,6 +3,7 @@ package io.relayr.api;
 import java.util.List;
 
 import io.relayr.model.App;
+import io.relayr.model.Command;
 import io.relayr.model.CreateWunderBar;
 import io.relayr.model.Device;
 import io.relayr.model.Transmitter;
@@ -29,6 +30,11 @@ public interface RelayrApi {
     /** @return an {@link rx.Observable} information about the user initiating the request. */
     @GET("/oauth2/user-info")
     Observable<User> getUserInfo();
+
+    @POST("/devices/{device_id}/cmd/{command_name}")
+    Observable<Void> sendCommand(@Path("device_id") String deviceId,
+                                 @Path("command_name") String commandName,
+                                 @Body Command command);
 
     /** Api call to tell the backend to create WunderBar.
      * @return an {@link rx.Observable} to a WunderBar that contains the IDs and Secrets of the

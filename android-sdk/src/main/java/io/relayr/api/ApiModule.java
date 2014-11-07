@@ -22,7 +22,7 @@ import retrofit.RestAdapter;
 import retrofit.client.Client;
 import retrofit.client.OkClient;
 
-import static io.relayr.BuildConfig.PACKAGE_NAME;
+import static io.relayr.BuildConfig.APPLICATION_ID;
 import static io.relayr.BuildConfig.VERSION_NAME;
 
 @Module(
@@ -32,7 +32,7 @@ import static io.relayr.BuildConfig.VERSION_NAME;
 public class ApiModule {
 
     public static final String API_ENDPOINT = "https://api.relayr.io";
-    private static final String USER_AGENT = PACKAGE_NAME + ".sdk.android/" + VERSION_NAME;
+    private static final String USER_AGENT = APPLICATION_ID + ".sdk.android/" + VERSION_NAME;
     private static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
     private final Context app;
 

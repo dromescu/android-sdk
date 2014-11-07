@@ -21,6 +21,10 @@ public enum DeviceModel {
         return id;
     }
 
+    public static DeviceModel from(TransmitterDevice device) {
+        return from(device.model);
+    }
+
     public static DeviceModel from(String id) {
         return LIGHT_PROX_COLOR.id.equals(id) ? LIGHT_PROX_COLOR:
                ACCELEROMETER_GYROSCOPE.id.equals(id) ? ACCELEROMETER_GYROSCOPE:

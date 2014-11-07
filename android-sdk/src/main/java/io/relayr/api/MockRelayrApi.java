@@ -7,12 +7,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.relayr.model.App;
+import io.relayr.model.Command;
 import io.relayr.model.CreateWunderBar;
 import io.relayr.model.Device;
 import io.relayr.model.Transmitter;
 import io.relayr.model.TransmitterDevice;
 import io.relayr.model.User;
 import rx.Observable;
+import rx.Subscriber;
 
 import static io.relayr.api.MockBackend.APP_INFO;
 import static io.relayr.api.MockBackend.TRANSMITTER_DEVICES;
@@ -44,6 +46,16 @@ public class MockRelayrApi implements RelayrApi {
     @Override
     public Observable<User> getUserInfo() {
         return mMockBackend.createObservable(new TypeToken<User>() {}, USER_INFO);
+    }
+
+    @Override
+    public Observable<Void> sendCommand(String deviceId, String commandName, Command command) {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(Subscriber<? super Void> subscriber) {
+                subscriber.onNext(null);
+            }
+        });
     }
 
     @Override

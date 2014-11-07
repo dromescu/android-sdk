@@ -27,7 +27,7 @@ import io.relayr.model.User;
 import io.relayr.storage.DataStorage;
 import io.relayr.storage.RelayrProperties;
 import rx.Observable;
-import rx.Subscriber;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -88,16 +88,16 @@ public class LoginActivity extends Activity {
                                     return mRelayrApi.getUserInfo();
                                 }
                             })
-                            .flatMap(new Func1<User, Observable<User>>() {
+                            .map(new Func1<User, User>() {
                                 @Override
-                                public Observable<User> call(User user) {
+                                public User call(User user) {
                                     DataStorage.saveUserId(user.id);
-                                    return Observable.from(user);
+                                    return user;
                                 }
                             })
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Subscriber<Object>() {
+                            .subscribe(new Observer<User>() {
 
                                 @Override
                                 public void onCompleted() {
@@ -114,7 +114,7 @@ public class LoginActivity extends Activity {
                                 }
 
                                 @Override
-                                public void onNext(Object a) {
+                                public void onNext(User user) {
 
                                 }
                             });

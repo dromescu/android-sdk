@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.relayr.RelayrSdk;
+import io.relayr.SocketClient;
 import io.relayr.api.SubscriptionApi;
 import io.relayr.model.App;
 import io.relayr.model.TransmitterDevice;
@@ -23,7 +24,7 @@ import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 
 @Singleton
-public class WebSocketClient {
+public class WebSocketClient implements SocketClient {
 
     private static final String TAG = WebSocketClient.class.getSimpleName();
     private final SubscriptionApi mSubscriptionApi;
@@ -47,11 +48,6 @@ public class WebSocketClient {
         return subject.observeOn(AndroidSchedulers.mainThread()).subscribe(subscriber);
     }
 
-    /**
-     * Subscribes an app to a device channel. Enables the app to receive data from the device
-     * @param device The device object to be subscribed to.
-     * @param subscriber The app which subscribes to the device channel
-     */
     public Subscription subscribe(TransmitterDevice device, Subscriber<Object> subscriber) {
         if (mWebSocketConnections.containsKey(device.id)) {
             return subscribe(mWebSocketConnections.get(device.id), subscriber);
@@ -131,10 +127,6 @@ public class WebSocketClient {
                 });
     }*/
 
-    /**
-     * Unsubscribes an app from a device channel
-     * @param sensorId the Id of {@link io.relayr.model.TransmitterDevice}
-     */
     public void unSubscribe(final String sensorId) {
         if (mWebSocketConnections.containsKey(sensorId)) {
             mWebSocketConnections.get(sensorId).onCompleted();

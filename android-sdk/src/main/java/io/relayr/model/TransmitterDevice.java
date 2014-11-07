@@ -13,4 +13,9 @@ public class TransmitterDevice extends Transmitter {
         super(id, secret, owner, name);
         this.model = model;
     }
+
+    public DeviceModel getModel() {
+        return DeviceModel.from(model);
+    }
+
 }
